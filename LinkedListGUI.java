@@ -5,24 +5,30 @@ import java.awt.*;
 
 public class LinkedListGUI extends JPanel {
     private Node[] table;
+    private int animationIndex = -1;
+    private int animationProgress = 0;
 
     public LinkedListGUI() {
         this.table = new Node[10];
     }
 
     public void updateData(Node[] table) {
-        System.out.println("updateData called");
-        for (int i = 0; i < table.length; i++) {
-            Node temp = table[i];
-            System.out.print("HashCode " + i + ": ");
-            while (temp != null) {
-                System.out.print(temp.key + " -> ");
-                temp = temp.next;
-            }
-            System.out.println("null");
-        }
         this.table = table;
         repaint();
+    }
+
+    public void startInsertAnimation(int index) {
+        animationIndex = index;
+        animationProgress = 0;
+        Timer timer = new Timer(100, e -> {
+            animationProgress++;
+            if (animationProgress >= 10) {
+                ((Timer) e.getSource()).stop();
+                animationIndex = -1;
+            }
+            repaint();
+        });
+        timer.start();
     }
 
     @Override
@@ -37,20 +43,55 @@ public class LinkedListGUI extends JPanel {
         int width = 100;
         int height = 30;
         int padding = 10;
+        int arrowSize = 10;
 
         for (int i = 0; i < table.length; i++) {
-            g.setColor(Color.BLACK);
-            g.drawRect(x, y + i * (height + padding), width, height);
-            g.drawString("HashCode :"+ i, x + 10, y + i * (height + padding) + 20);
-
             Node current = table[i];
             int innerX = x + width + padding;
 
+            // Draw hash code box
+            g.setColor(Color.BLACK);
+            g.drawRect(x, y + i * (height + padding), width, height);
+            g.drawString("HashCode: " + i, x + 10, y + i * (height + padding) + 20);
+
+            if (current != null && i == animationIndex) {
+                // Draw animated node moving into the linked list
+                int animationX = x + width + padding + animationProgress * 10;
+                g.setColor(Color.BLUE);
+                g.drawRect(animationX, y + i * (height + padding), width, height);
+                g.drawString("Key: " + current.key, animationX + 10, y + i * (height + padding) + 20);
+            }
+
+            if (current != null && i != animationIndex) {
+                // Draw arrow from hash code box to the first node
+                int x1 = x + width; // End of hash code box
+                int y1 = y + i * (height + padding) + height / 2; // Center of hash code box
+                int x2 = 243; // Start of arrow line (start of first node)
+                int y2 = y1; // Center of hash code box
+
+                // Draw arrow line
+                g.setColor(Color.RED);
+                g.drawLine(x1, y1, x2, y2);
+
+                // Draw arrowhead
+                double angle = Math.atan2(y2 - y1, x2 - x1);
+                int dx = (int) (arrowSize * Math.cos(angle - Math.PI / 6));
+                int dy = (int) (arrowSize * Math.sin(angle - Math.PI / 6));
+                g.drawLine(x2, y2, x2 - dx, y2 - dy);
+
+                dx = (int) (arrowSize * Math.cos(angle + Math.PI / 6));
+                dy = (int) (arrowSize * Math.sin(angle + Math.PI / 6));
+                g.drawLine(x2, y2, x2 - dx, y2 - dy);
+
+                // Move innerX to start drawing nodes
+                innerX += width + padding;
+            }
+
             while (current != null) {
+                // Draw node rectangle
                 g.setColor(Color.BLUE);
                 g.drawRect(innerX, y + i * (height + padding), width, height);
                 g.drawString("Key: " + current.key, innerX + 10, y + i * (height + padding) + 20);
-                //g.drawString("Value: " + current.value, innerX + 10, y + i * (height + padding) + 40);
 
                 // Draw three parallel segments if it's the last node in the chain
                 if (current.next == null) {
@@ -62,6 +103,30 @@ public class LinkedListGUI extends JPanel {
                         g.drawLine(innerX + width, segmentY, innerX + width + segmentLength, segmentY);
                     }
                 }
+
+                // Draw arrows to next node
+                if (current.next != null) {
+                    int x1 = innerX + width; // Start of arrow line
+                    int y1 = y + i * (height + padding) + height / 2;
+                    int x2 = innerX + width + padding; // End of arrow line
+                    int y2 = y1;
+
+                    // Draw arrow line
+                    g.setColor(Color.RED);
+                    g.drawLine(x1, y1, x2, y2);
+
+    
+                    // Draw arrowhead
+                    double angle = Math.atan2(y2 - y1, x2 - x1);
+                    int dx = (int) (arrowSize * Math.cos(angle - Math.PI / 6));
+                    int dy = (int) (arrowSize * Math.sin(angle - Math.PI / 6));
+                    g.drawLine(x2, y2, x2 - dx, y2 - dy);
+    
+                    dx = (int) (arrowSize * Math.cos(angle + Math.PI / 6));
+                    dy = (int) (arrowSize * Math.sin(angle + Math.PI / 6));
+                    g.drawLine(x2, y2, x2 - dx, y2 - dy);
+                }
+    
                 innerX += width + padding;
                 current = current.next;
             }

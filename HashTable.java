@@ -32,6 +32,7 @@ public class HashTable {
         }
         System.out.println("Added: " + key);
         updateGUI();
+        gui.startInsertAnimation(index);
         return index;
     }
 
