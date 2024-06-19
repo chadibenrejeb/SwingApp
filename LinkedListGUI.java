@@ -14,7 +14,7 @@ public class LinkedListGUI extends JPanel {
         System.out.println("updateData called");
         for (int i = 0; i < table.length; i++) {
             Node temp = table[i];
-            System.out.print("Index " + i + ": ");
+            System.out.print("HashCode " + i + ": ");
             while (temp != null) {
                 System.out.print(temp.key + " -> ");
                 temp = temp.next;
@@ -51,6 +51,17 @@ public class LinkedListGUI extends JPanel {
                 g.drawRect(innerX, y + i * (height + padding), width, height);
                 g.drawString("Key: " + current.key, innerX + 10, y + i * (height + padding) + 20);
                 //g.drawString("Value: " + current.value, innerX + 10, y + i * (height + padding) + 40);
+
+                // Draw three parallel segments if it's the last node in the chain
+                if (current.next == null) {
+                    g.setColor(Color.RED);
+                    int segmentLength = 20;
+                    int segmentSpacing = 13;
+                    for (int j = 0; j < 3; j++) {
+                        int segmentY = y + i * (height + padding) + j * segmentSpacing;
+                        g.drawLine(innerX + width, segmentY, innerX + width + segmentLength, segmentY);
+                    }
+                }
                 innerX += width + padding;
                 current = current.next;
             }
