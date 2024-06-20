@@ -14,7 +14,12 @@ public class HashTable {
     }
 
     private int hash(String key) {
-        return Math.abs(key.hashCode() % table.length);
+        int hash = 0;
+        int n = key.length();
+        for (int i = 0; i < n; i++) {
+            hash = (31 * key.charAt(i) + hash) % table.length ;
+        }
+        return hash;
     }
 
     public Integer add(String key) {

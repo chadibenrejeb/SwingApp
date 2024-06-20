@@ -5,8 +5,8 @@ import java.awt.*;
 
 public class LinkedListGUI extends JPanel {
     private Node[] table;
-    private int animationIndex = -1;
-    private int animationProgress = 0;
+    private int animationIndex = -1; // no animation 
+    private int animationProgress = 0; //track the progress of the animation
 
     public LinkedListGUI() {
         this.table = new Node[10];
@@ -25,8 +25,10 @@ public class LinkedListGUI extends JPanel {
             if (animationProgress >= 10) {
                 ((Timer) e.getSource()).stop();
                 animationIndex = -1;
+                
             }
             repaint();
+            
         });
         timer.start();
     }
@@ -56,27 +58,27 @@ public class LinkedListGUI extends JPanel {
 
             if (current != null && i == animationIndex) {
                 // Draw animated node moving into the linked list
-                int animationX = x + width + padding + animationProgress * 10;
+                int animationX = x + width + padding + animationProgress*10 + 1000 ;
                 g.setColor(Color.BLUE);
-                g.drawRect(animationX, y + i * (height + padding), width, height);
+                g.drawRect(animationX  , y + i * (height + padding ), width, height);
                 g.drawString("Key: " + current.key, animationX + 10, y + i * (height + padding) + 20);
             }
 
             if (current != null && i != animationIndex) {
-                // Draw arrow from hash code box to the first node
-                int x1 = x + width; // End of hash code box
+                // draw arrow from hash code box to the first node
+                int x1 = x + width; // end of hash code box
                 int y1 = y + i * (height + padding) + height / 2; // Center of hash code box
-                int x2 = 243; // Start of arrow line (start of first node)
-                int y2 = y1; // Center of hash code box
+                int x2 = 243; // start of arrow line (start of first node)
+                int y2 = y1; // center of hash code box
 
                 // Draw arrow line
                 g.setColor(Color.RED);
                 g.drawLine(x1, y1, x2, y2);
 
-                // Draw arrowhead
+                // Draw arrowhead // to create arrowhead in the shape of V 
                 double angle = Math.atan2(y2 - y1, x2 - x1);
                 int dx = (int) (arrowSize * Math.cos(angle - Math.PI / 6));
-                int dy = (int) (arrowSize * Math.sin(angle - Math.PI / 6));
+                int dy = (int) (arrowSize * Math.sin(angle - Math.PI / 6)); 
                 g.drawLine(x2, y2, x2 - dx, y2 - dy);
 
                 dx = (int) (arrowSize * Math.cos(angle + Math.PI / 6));
@@ -98,9 +100,12 @@ public class LinkedListGUI extends JPanel {
                     g.setColor(Color.RED);
                     int segmentLength = 20;
                     int segmentSpacing = 13;
+                    g.drawLine(innerX + width + segmentLength  ,y + i * (height + padding) + 13 , innerX + width + segmentLength   ,  y + i * (height + padding ));
+                    g.drawLine(innerX + width + segmentLength  ,y + i * (height + padding) + 13 , innerX + width + segmentLength   ,  y + i * (height + padding )+ 26);
+                    g.drawLine(innerX + width ,y + i * (height + padding) + 13 , innerX + width + segmentLength  ,  y + i * (height + padding ) + 13);
                     for (int j = 0; j < 3; j++) {
-                        int segmentY = y + i * (height + padding) + j * segmentSpacing;
-                        g.drawLine(innerX + width, segmentY, innerX + width + segmentLength, segmentY);
+                        int segmentY = y + i * (height + padding ) + j * segmentSpacing;
+                        g.drawLine(innerX + width + 20 , segmentY, innerX + width + segmentLength + 20, segmentY -10);
                     }
                 }
 

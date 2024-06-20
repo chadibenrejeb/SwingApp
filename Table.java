@@ -61,8 +61,8 @@ public class Table extends JFrame {
         });
 
         JButton displayButton = new JButton("Display");
-        gbc.gridx = 2;
-        gbc.gridy = 1;
+        gbc.gridx = 0;
+        gbc.gridy = 2;
         buttonPanel.add(displayButton, gbc);
         displayButton.addActionListener((e) -> {
             ht.display();
@@ -70,22 +70,22 @@ public class Table extends JFrame {
         });
 
         JButton sizeButton = new JButton("Size");
-        gbc.gridx = 3;
-        gbc.gridy = 1;
+        gbc.gridx = 1;
+        gbc.gridy = 2;
         buttonPanel.add(sizeButton, gbc);
         sizeButton.addActionListener((e) -> {
             int size = ht.size();
             textField1.setText("Size: " + size);
         });
 
-        JButton exitButton = new JButton("Exit");
-        gbc.gridx = 4;
-        gbc.gridy = 1;
-        buttonPanel.add(exitButton, gbc);
-        exitButton.addActionListener((e) -> {
-            ht.exit();
-            textField1.setText("Exit");
-        });
+        // JButton exitButton = new JButton("Exit");
+        // gbc.gridx = 4;
+        // gbc.gridy = 1;
+        // buttonPanel.add(exitButton, gbc);
+        // exitButton.addActionListener((e) -> {
+        //     ht.exit();
+        //     textField1.setText("Exit");
+        // });
 
         // Adding panels to the frame
         getContentPane().add(buttonPanel, BorderLayout.EAST);
